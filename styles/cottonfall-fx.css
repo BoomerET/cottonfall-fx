@@ -1,0 +1,63 @@
+.cottonfall-fx .window-content {
+  padding: 0;
+}
+
+.cottonfall-fx-panel {
+  padding: 16px;
+}
+
+.cottonfall-fx-header {
+  text-align: center;
+  margin-bottom: 18px;
+}
+
+.cottonfall-fx-header h1 {
+  margin: 0;
+  font-size: 1.5rem;
+  letter-spacing: 0.12em;
+}
+
+.cottonfall-fx-subtitle {
+  margin-top: 4px;
+  opacity: 0.7;
+  font-size: 0.85rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.cottonfall-fx-section {
+  margin-top: 14px;
+}
+
+.cottonfall-fx-section h2 {
+  margin: 0 0 8px;
+  padding-bottom: 4px;
+  border-bottom: 1px solid var(--color-border-light-primary);
+  font-size: 1rem;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+}
+
+.cottonfall-fx-button {
+  width: 100%;
+  min-height: 40px;
+  margin: 4px 0;
+  font-size: 1rem;
+}
+
+.cottonfall-fx-button i {
+  margin-right: 8px;
+}
+
+.cottonfall-fx-placeholder {
+  padding: 7px 10px;
+  margin: 3px 0;
+  opacity: 0.45;
+}
+
+.cottonfall-fx-placeholder i {
+  width: 24px;
+  text-align: center;
+  margin-right: 5px;
+}
+

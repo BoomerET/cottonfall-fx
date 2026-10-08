@@ -1,0 +1,22 @@
+# Vim swap and backup files
+*.swp
+*.swo
+*~
+.*.swp
+.*.swo
+
+# Operating system files
+.DS_Store
+Thumbs.db
+
+# Logs and temporary files
+*.log
+*.tmp
+
+# Node dependencies (if we add them later)
+node_modules/
+
+# Environment and secrets
+.env
+.env.*
+
