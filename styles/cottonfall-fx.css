@@ -49,6 +49,29 @@
   margin-right: 8px;
 }
 
+/* On/off state for the glitch toggle */
+.cottonfall-fx-active {
+  box-shadow: 0 0 8px var(--color-shadow-highlight, #ff6400);
+  border-color: var(--color-border-highlight, #ff6400);
+  font-weight: bold;
+}
+
+/* Row of small preset buttons */
+.cottonfall-fx-row {
+  display: flex;
+  gap: 6px;
+}
+
+.cottonfall-fx-row .cottonfall-fx-mini {
+  margin: 4px 0;
+  min-height: 32px;
+  font-size: 0.9rem;
+}
+
+.cottonfall-fx-mini i {
+  margin-right: 0;
+}
+
 .cottonfall-fx-placeholder {
   padding: 7px 10px;
   margin: 3px 0;
@@ -60,4 +83,3 @@
   text-align: center;
   margin-right: 5px;
 }
-

@@ -8,29 +8,55 @@
   </header>
 
   <section class="cottonfall-fx-section">
-    <h2>Reality</h2>
+    <h2>Visual Glitch</h2>
 
     <button
       type="button"
-      data-action="realityGlitch"
-      class="cottonfall-fx-button"
+      data-action="toggleGlitch"
+      class="cottonfall-fx-button {{#if glitchActive}}cottonfall-fx-active{{/if}}"
     >
+      <i class="fas fa-wave-square"></i>
+      {{#if glitchActive}}Glitch: ON{{else}}Glitch: OFF{{/if}}
+    </button>
+
+    <div class="cottonfall-fx-row">
+      <button type="button" data-action="glitchSubtle" class="cottonfall-fx-button cottonfall-fx-mini">
+        Subtle
+      </button>
+      <button type="button" data-action="glitchVHS" class="cottonfall-fx-button cottonfall-fx-mini">
+        VHS
+      </button>
+      <button type="button" data-action="glitchHard" class="cottonfall-fx-button cottonfall-fx-mini">
+        Hard
+      </button>
+    </div>
+  </section>
+
+  <section class="cottonfall-fx-section">
+    <h2>Reality</h2>
+
+    <button type="button" data-action="realityLurch" class="cottonfall-fx-button">
       <i class="fas fa-bolt"></i>
-      Reality Glitch
+      Reality Lurch
+    </button>
+
+    <button type="button" data-action="fullBreak" class="cottonfall-fx-button">
+      <i class="fas fa-explosion"></i>
+      Full Break
+    </button>
+  </section>
+
+  <section class="cottonfall-fx-section">
+    <h2>Events</h2>
+
+    <button type="button" data-action="threeSeventeen" class="cottonfall-fx-button">
+      <i class="fas fa-clock"></i>
+      3:17 Event
     </button>
   </section>
 
   <section class="cottonfall-fx-section cottonfall-fx-future">
     <h2>Coming Later</h2>
-
-    <button
-      type="button"
-      data-action="threeSeventeen"
-      class="cottonfall-fx-button"
-    >
-      <i class="fas fa-clock"></i>
-      3:17 Event
-    </button>
 
     <div class="cottonfall-fx-placeholder">
       <i class="fas fa-smog"></i>
@@ -54,4 +80,3 @@
   </section>
 
 </div>
-

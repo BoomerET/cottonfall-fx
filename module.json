@@ -2,7 +2,7 @@
   "id": "cottonfall-fx",
   "title": "Cottonfall FX",
   "description": "Atmospheric and reality-bending effects for the Cottonfall campaign.",
-  "version": "0.0.5",
+  "version": "0.1.0",
   "authors": [
     {
       "name": "David Berkompas"
@@ -28,4 +28,3 @@
     "styles/cottonfall-fx.css"
   ]
 }
-
