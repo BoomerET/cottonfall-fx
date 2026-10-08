@@ -84,6 +84,9 @@ void main(){
   vec4 srcOrig = texture(uSampler, uv);
 
   float amt = clamp(intensity, 0.0, 1.0);
+  // Only affect actual (opaque) image pixels — never bleed the glitch into the
+  // transparent margin around the map image.
+  amt *= smoothstep(0.0, 0.05, srcOrig.a);
   if (amt <= 0.0) { fragColor = srcOrig; return; }
 
   vec2 screenPx = outputFrame.xy + vTextureCoord * outputFrame.zw;
