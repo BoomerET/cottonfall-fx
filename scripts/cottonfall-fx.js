@@ -1,6 +1,7 @@
 import { CottonfallGlitch } from "./glitch-filter.js";
 import { CottonfallFog } from "./fog.js";
 import { CottonfallPowerFlicker } from "./power-flicker.js";
+import { CottonfallShadow } from "./shadow-apparition.js";
 
 const MODULE_ID = "cottonfall-fx";
 const sleep = (ms) => new Promise((resolve) => setTimeout(resolve, Math.max(0, ms)));
@@ -36,6 +37,12 @@ function applyGlitchLocal(data) {
     case "setOptions":
       CottonfallGlitch.setOptions(data.opts || {});
       break;
+    case "shadow":
+      if (data.sceneId !== canvas.scene?.id) return;
+      void CottonfallShadow.play(data).catch(err =>
+        console.error("Cottonfall FX | Shadow failed", err)
+      );
+      return;
     default:
       return;
   }
@@ -212,8 +219,79 @@ Hooks.once("ready", () => {
       await CottonfallPowerFlicker.play();
     },
 
-    /* ---------------- Reality lurch (FXMaster built-ins) ---------------- */
+    /* ---------------- Something in the Fog ---------------- */
+    async shadowAt(x, y, options = {}) {
+      if (!game.user?.isGM) {
+        ui.notifications.warn(
+          "Cottonfall FX | Only a GM can trigger an apparition."
+        );
+        return;
+      }
+    
+      if (!canvas?.ready || !canvas.scene) return;
+    
+      const data = {
+        action: "shadow",
+        sceneId: canvas.scene.id,
+        x,
+        y,
+        ...options
+      };
+    
+      // Foundry sockets don't echo to the sender.
+      // Play locally on the GM screen.
+      void CottonfallShadow.play(data).catch(err =>
+        console.error("Cottonfall FX | Local shadow failed", err)
+      );
+    
+      // Broadcast to connected players.
+      game.socket.emit(SOCKET, data);
+    },
 
+    /* ---------------- Shadow placement ---------------- */
+    placeShadow(options = {}) {
+      if (!game.user?.isGM) {
+        ui.notifications.warn("Only a GM can place an apparition.");
+        return;
+      }
+    
+      if (!canvas?.ready) {
+        ui.notifications.warn("The canvas isn't ready.");
+        return;
+      }
+    
+      // Cancel any previous placement attempt.
+      this.cancelShadowPlacement?.();
+    
+      const stage = canvas.stage;
+      const previousEventMode = stage.eventMode;
+    
+      const onPointerDown = (event) => {
+        // Ignore right-clicks.
+        if (event.button !== 0) return;
+      
+        const point = event.getLocalPosition(stage);
+      
+        this.cancelShadowPlacement();
+      
+        void this.shadowAt(point.x, point.y, options);
+      };
+    
+      this.cancelShadowPlacement = () => {
+        stage.off("pointerdown", onPointerDown);
+        stage.eventMode = previousEventMode;
+        this.cancelShadowPlacement = null;
+      };
+    
+      stage.eventMode = "static";
+      stage.on("pointerdown", onPointerDown);
+    
+      ui.notifications.info(
+        "Something in the Fog: Click the map to place the apparition."
+      );
+    },
+
+    /* ---------------- Reality lurch (FXMaster built-ins) ---------------- */
     /*
      * A physical "reality lurches" beat: a cold color shift plus a brief
      * screen shake, composed from FXMaster's built-in filters via the V8
