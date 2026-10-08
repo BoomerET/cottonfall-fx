@@ -1,5 +1,6 @@
 import { CottonfallGlitch } from "./glitch-filter.js";
 import { CottonfallFog } from "./fog.js";
+import { CottonfallPowerFlicker } from "./power-flicker.js";
 
 const MODULE_ID = "cottonfall-fx";
 const sleep = (ms) => new Promise((resolve) => setTimeout(resolve, Math.max(0, ms)));
@@ -83,6 +84,7 @@ class CottonfallFXPanel extends foundry.applications.api.HandlebarsApplicationMi
       threeSeventeen: CottonfallFXPanel.#threeSeventeen,
       fogOn: CottonfallFXPanel.#fogOn,
       fogOff: CottonfallFXPanel.#fogOff,
+      powerFlicker: CottonfallFXPanel.#powerFlicker,
     }
   };
 
@@ -110,6 +112,7 @@ class CottonfallFXPanel extends foundry.applications.api.HandlebarsApplicationMi
   static async #threeSeventeen() { await globalThis.CottonfallFX.threeSeventeen(); }
   static #fogOn() { return globalThis.CottonfallFX?.fogOn(); }
   static #fogOff() { return globalThis.CottonfallFX?.fogOff(); }
+  static #powerFlicker() { return globalThis.CottonfallFX?.powerFlicker(); }
 }
 
 
@@ -201,6 +204,12 @@ Hooks.once("ready", () => {
 
     async fogOff() {
       await CottonfallFog.stop();
+    },
+
+    /* ---------------- Power Flicker ---------------- */
+
+    async powerFlicker() {
+      await CottonfallPowerFlicker.play();
     },
 
     /* ---------------- Reality lurch (FXMaster built-ins) ---------------- */
