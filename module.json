@@ -26,5 +26,6 @@
   ],
   "styles": [
     "styles/cottonfall-fx.css"
-  ]
+  ],
+  "socket": true
 }

@@ -12,6 +12,47 @@ const GLITCH_PRESETS = {
   hard:   { intensity: 0.90, speed: 3.0, rgbSplit: 0.80, blockiness: 0.90, scanlines: 0.30 },
 };
 
+/*
+ * Socket channel so the (local, per-client) visual glitch mirrors to every
+ * player's screen, not just the GM's. The GM broadcasts a glitch action and
+ * every connected client — including the GM — applies it to its own canvas.
+ */
+const SOCKET = "module.cottonfall-fx";
+
+/*
+ * Apply a glitch action to THIS client's canvas. Never emits (no echo loop).
+ */
+function applyGlitchLocal(data) {
+  if (!data || typeof data !== "object") return;
+  switch (data.action) {
+    case "enable":
+      CottonfallGlitch.enable(data.opts || {});
+      break;
+    case "disable":
+      CottonfallGlitch.disable();
+      break;
+    case "setOptions":
+      CottonfallGlitch.setOptions(data.opts || {});
+      break;
+    default:
+      return;
+  }
+  globalThis.CottonfallFX?._refresh?.();
+}
+
+/*
+ * Apply here AND tell every other client to do the same.
+ * (Foundry's socket.emit does not echo back to the sender.)
+ */
+function broadcastGlitch(data) {
+  applyGlitchLocal(data);
+  try {
+    game.socket?.emit(SOCKET, data);
+  } catch (err) {
+    console.error("Cottonfall FX | socket emit failed", err);
+  }
+}
+
 
 /*
  * Cottonfall FX Control Panel
@@ -96,6 +137,9 @@ Hooks.once("init", () => {
  * Public Cottonfall FX API
  */
 Hooks.once("ready", () => {
+  // Every client (GM and players) listens for glitch broadcasts.
+  game.socket.on(SOCKET, applyGlitchLocal);
+
   globalThis.CottonfallFX = {
 
     panel: null,
@@ -118,32 +162,32 @@ Hooks.once("ready", () => {
 
     /* ---------------- Visual glitch (shader) ---------------- */
 
-    glitchToggle(opts = {}) {
-      CottonfallGlitch.toggle(opts);
+    glitchToggle() {
+      // Decide the resulting state here, then broadcast an explicit enable/disable
+      // so every client converges to the same thing (rather than each toggling).
+      const willEnable = !CottonfallGlitch.active;
+      broadcastGlitch(willEnable ? { action: "enable", opts: {} } : { action: "disable" });
       this._refresh();
     },
 
     glitchOn(opts = {}) {
-      CottonfallGlitch.enable(opts);
-      this._refresh();
+      broadcastGlitch({ action: "enable", opts });
     },
 
     glitchOff() {
-      CottonfallGlitch.disable();
-      this._refresh();
+      broadcastGlitch({ action: "disable" });
     },
 
     /*
-     * Apply a strength preset and ensure the glitch is on.
+     * Apply a strength preset and ensure the glitch is on — on every screen.
      */
     glitchPreset(name) {
       const preset = GLITCH_PRESETS[name] ?? GLITCH_PRESETS.vhs;
-      CottonfallGlitch.enable(preset);
-      this._refresh();
+      broadcastGlitch({ action: "enable", opts: preset });
     },
 
     setGlitch(opts = {}) {
-      CottonfallGlitch.setOptions(opts);
+      broadcastGlitch({ action: "setOptions", opts });
     },
 
     /* ---------------- Reality lurch (FXMaster built-ins) ---------------- */
@@ -224,13 +268,13 @@ Hooks.once("ready", () => {
       const wasActive = CottonfallGlitch.active;
       const prev = { ...CottonfallGlitch.opts };
 
-      CottonfallGlitch.enable({ intensity: 0.85, speed: 3.0, rgbSplit: 0.7, blockiness: 0.85, scanlines: 0.3 });
+      this.glitchOn({ intensity: 0.85, speed: 3.0, rgbSplit: 0.7, blockiness: 0.85, scanlines: 0.3 });
       const lurch = this.realityLurch(duration);
       await sleep(duration);
       await lurch;
 
-      if (wasActive) CottonfallGlitch.enable(prev);
-      else CottonfallGlitch.disable();
+      if (wasActive) this.glitchOn(prev);
+      else this.glitchOff();
       this._refresh();
     },
 
