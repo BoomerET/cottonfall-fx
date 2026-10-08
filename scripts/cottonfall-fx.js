@@ -1,4 +1,5 @@
 import { CottonfallGlitch } from "./glitch-filter.js";
+import { CottonfallFog } from "./fog.js";
 
 const MODULE_ID = "cottonfall-fx";
 const sleep = (ms) => new Promise((resolve) => setTimeout(resolve, Math.max(0, ms)));
@@ -79,7 +80,9 @@ class CottonfallFXPanel extends foundry.applications.api.HandlebarsApplicationMi
       glitchHard: CottonfallFXPanel.#glitchHard,
       realityLurch: CottonfallFXPanel.#realityLurch,
       fullBreak: CottonfallFXPanel.#fullBreak,
-      threeSeventeen: CottonfallFXPanel.#threeSeventeen
+      threeSeventeen: CottonfallFXPanel.#threeSeventeen,
+      fogOn: CottonfallFXPanel.#fogOn,
+      fogOff: CottonfallFXPanel.#fogOff,
     }
   };
 
@@ -105,6 +108,8 @@ class CottonfallFXPanel extends foundry.applications.api.HandlebarsApplicationMi
   static async #realityLurch() { await globalThis.CottonfallFX.realityLurch(); }
   static async #fullBreak() { await globalThis.CottonfallFX.fullBreak(); }
   static async #threeSeventeen() { await globalThis.CottonfallFX.threeSeventeen(); }
+  static #fogOn() { return globalThis.CottonfallFX?.fogOn(); }
+  static #fogOff() { return globalThis.CottonfallFX?.fogOff(); }
 }
 
 
@@ -188,6 +193,14 @@ Hooks.once("ready", () => {
 
     setGlitch(opts = {}) {
       broadcastGlitch({ action: "setOptions", opts });
+    },
+
+    async fogOn() {
+      await CottonfallFog.start();
+    },
+
+    async fogOff() {
+      await CottonfallFog.stop();
     },
 
     /* ---------------- Reality lurch (FXMaster built-ins) ---------------- */
