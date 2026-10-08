@@ -92,6 +92,7 @@ class CottonfallFXPanel extends foundry.applications.api.HandlebarsApplicationMi
       fogOn: CottonfallFXPanel.#fogOn,
       fogOff: CottonfallFXPanel.#fogOff,
       powerFlicker: CottonfallFXPanel.#powerFlicker,
+      shadowPlace: CottonfallFXPanel.#shadowPlace,
     }
   };
 
@@ -120,6 +121,7 @@ class CottonfallFXPanel extends foundry.applications.api.HandlebarsApplicationMi
   static #fogOn() { return globalThis.CottonfallFX?.fogOn(); }
   static #fogOff() { return globalThis.CottonfallFX?.fogOff(); }
   static #powerFlicker() { return globalThis.CottonfallFX?.powerFlicker(); }
+  static #shadowPlace() { return globalThis.CottonfallFX?.placeShadow(); }
 }
 
 
