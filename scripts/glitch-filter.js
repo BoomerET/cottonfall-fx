@@ -24,7 +24,12 @@ const DEFAULTS = Object.freeze({
   rgbSplit: 0.3,
   blockiness: 0.5,
   scanlines: 0.2,
-  target: "primary",
+  // Which canvas layer the glitch is applied to:
+  //   "background"  -> just the scene's background map image (default, like FXMaster's own filters)
+  //   "primary"     -> the whole scene group (map + tiles + tokens)
+  //   "environment" -> map + tiles (tokens stay crisp)
+  //   "stage"       -> the entire board, including grid/overlays
+  target: "background",
 });
 
 const VERTEX = `#version 300 es
@@ -130,8 +135,13 @@ class GlitchController {
       stage: canvas?.stage,
       primary: canvas?.primary,
       environment: canvas?.environment,
+      background: canvas?.primary?.background,
     };
-    return map[this.opts.target] ?? canvas?.primary ?? canvas?.stage ?? null;
+    return map[this.opts.target]
+      ?? canvas?.primary?.background
+      ?? canvas?.primary
+      ?? canvas?.stage
+      ?? null;
   }
 
   _makeFilter() {
