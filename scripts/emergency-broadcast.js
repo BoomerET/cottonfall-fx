@@ -69,6 +69,15 @@ export class CottonfallEmergencyBroadcast {
       this.timer = null;
     }
 
-    document.getElementById(this.overlayId)?.remove();
+    const overlay = document.getElementById(this.overlayId);
+    if (!overlay) return;
+
+    // Begin the CSS fade-out.
+    overlay.classList.remove("cf-visible");
+
+    // Remove the element after the transition completes.
+    setTimeout(() => {
+      overlay.remove();
+    }, 1000);
   }
 }
