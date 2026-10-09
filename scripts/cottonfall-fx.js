@@ -437,7 +437,26 @@ Hooks.once("ready", () => {
     },
 
     _refresh() {
-      if (this.panel?.rendered) this.panel.render(false);
+      const panel = this.panel;
+    
+      if (!panel?.rendered) return;
+    
+      // Update the Glitch toggle button without re-rendering
+      // the entire control panel.
+      const button = panel.element?.querySelector(
+        '[data-action="toggleGlitch"]'
+      );
+    
+      if (!button) return;
+    
+      const active = !!CottonfallGlitch.active;
+    
+      button.classList.toggle("cottonfall-fx-active", active);
+    
+      button.innerHTML = `
+        <i class="fas fa-wave-square"></i>
+        Glitch: ${active ? "ON" : "OFF"}
+      `;
     },
 
     /* ---------------- Visual glitch (shader) ---------------- */
