@@ -135,13 +135,57 @@
     </button>
   </section>
 
-  <section class="cottonfall-fx-section cottonfall-fx-future">
-    <h2>Coming Later</h2>
+  <section class="cottonfall-fx-section">
+  <h2>Emergency Broadcast</h2>
 
-    <div class="cottonfall-fx-placeholder">
-      <i class="fas fa-radio"></i>
-      Emergency Broadcast
+  <div class="cottonfall-fx-emergency">
+    <label>
+      Broadcast Title
+      <input
+        type="text"
+        name="emergencyTitle"
+        value="SHELTER IN PLACE"
+        placeholder="Emergency title"
+      />
+    </label>
+
+    <label>
+      Emergency Message
+      <textarea
+        name="emergencyMessage"
+        rows="5"
+        placeholder="Enter the emergency announcement..."
+      >All residents are instructed to remain indoors.
+
+Do not investigate knocking sounds originating from unoccupied rooms.
+
+DO NOT ACKNOWLEDGE THE SECOND ANNOUNCEMENT.</textarea>
+    </label>
+
+    <label>
+      Duration (seconds — 0 = Until Dismissed)
+      <input
+        type="number"
+        name="emergencyDuration"
+        value="15"
+        min="0"
+        max="300"
+        step="1"
+      />
+    </label>
+
+    <div class="cottonfall-fx-row">
+      <button type="button" data-action="emergencyBroadcast">
+        <i class="fas fa-broadcast-tower"></i>
+        Broadcast
+      </button>
+
+      <button type="button" data-action="emergencyDismiss">
+        <i class="fas fa-times-circle"></i>
+        Dismiss
+      </button>
     </div>
-  </section>
+  </div>
+</section>
 
 </div>

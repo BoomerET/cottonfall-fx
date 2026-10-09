@@ -106,6 +106,8 @@ class CottonfallFXPanel extends foundry.applications.api.HandlebarsApplicationMi
       fogOff: CottonfallFXPanel.#fogOff,
       powerFlicker: CottonfallFXPanel.#powerFlicker,
       shadowPlace: CottonfallFXPanel.#shadowPlace,
+      emergencyBroadcast: CottonfallFXPanel.#emergencyBroadcast,
+      emergencyDismiss: CottonfallFXPanel.#emergencyDismiss,
     }
   };
 
@@ -168,6 +170,40 @@ class CottonfallFXPanel extends foundry.applications.api.HandlebarsApplicationMi
       hold: hold * 1000,
       fadeOut: fadeOut * 1000
     });
+  }
+  static #emergencyBroadcast(event, button) {
+    const panel = button.closest(".cottonfall-fx");
+
+    if (!panel) {
+      console.error("Cottonfall FX | Emergency panel not found.");
+      return;
+    }
+
+    const title = panel.querySelector(
+      '[name="emergencyTitle"]'
+    )?.value.trim() || "SHELTER IN PLACE";
+
+    const message = panel.querySelector(
+      '[name="emergencyMessage"]'
+    )?.value || "";
+
+    const rawDuration = Number(
+      panel.querySelector('[name="emergencyDuration"]')?.value
+    );
+
+    const duration = Number.isFinite(rawDuration)
+      ? Math.max(0, Math.min(300, Math.round(rawDuration)))
+      : 15;
+
+    return globalThis.CottonfallFX?.broadcastEmergency({
+      title,
+      message,
+      duration
+    });
+  }
+
+  static #emergencyDismiss() {
+    return globalThis.CottonfallFX?.dismissEmergency();
   }
 }
 
