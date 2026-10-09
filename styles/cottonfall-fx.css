@@ -233,3 +233,80 @@
     font-size: 22px;
   }
 }
+
+/* ==========================================================
+   COTTONFALL FX — CONTROL PANEL LAYOUT
+   ========================================================== */
+
+/* Three horizontal Atmosphere buttons */
+
+.cottonfall-fx-atmosphere-row {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 8px;
+}
+
+.cottonfall-fx-atmosphere-row button {
+  width: 100%;
+  min-width: 0;
+  padding: 8px 4px;
+  white-space: nowrap;
+  font-size: 12px;
+}
+
+/* Emergency Broadcast form */
+
+.cottonfall-fx-emergency {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.cottonfall-fx-emergency > label {
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+  gap: 5px;
+  width: 100%;
+  min-width: 0;
+}
+
+.cottonfall-fx-emergency input,
+.cottonfall-fx-emergency textarea {
+  display: block;
+  width: 100%;
+  min-width: 0;
+  box-sizing: border-box;
+}
+
+.cottonfall-fx-emergency textarea {
+  height: 110px;
+  min-height: 80px;
+  resize: vertical;
+  font-family: inherit;
+  line-height: 1.4;
+}
+
+/* Broadcast and Dismiss side by side */
+
+.cottonfall-fx-emergency .cottonfall-fx-row {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 8px;
+}
+
+.cottonfall-fx-emergency .cottonfall-fx-row button {
+  width: 100%;
+  min-width: 0;
+}
+
+/* Keep the panel usable on smaller screens */
+
+#cottonfall-fx-panel {
+  max-height: 90vh;
+}
+
+#cottonfall-fx-panel .window-content {
+  overflow-y: auto;
+  min-height: 0;
+}
