@@ -481,7 +481,7 @@ Hooks.once("ready", () => {
 
       // Send the same announcement to connected players.
       game.socket.emit(SOCKET, {
-        type: "emergencyBroadcast",
+        action: "emergencyBroadcast",
         options
       });
     },
@@ -492,9 +492,10 @@ Hooks.once("ready", () => {
       CottonfallEmergencyBroadcast.dismiss();
 
       game.socket.emit(SOCKET, {
-        type: "emergencyDismiss"
+        action: "emergencyDismiss"
       });
     },
+
   };
 
   // Temporary Emergency Broadcast test API
