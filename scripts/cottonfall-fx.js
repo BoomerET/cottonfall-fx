@@ -165,9 +165,16 @@ class CottonfallFXPanel extends foundry.applications.api.HandlebarsApplicationMi
     return {
       glitchActive: !!CottonfallGlitch.active,
 
+      // Something in the Fog
       shadowFadeIn: game.settings.get(MODULE_ID, "shadowFadeIn"),
       shadowHold: game.settings.get(MODULE_ID, "shadowHold"),
-      shadowFadeOut: game.settings.get(MODULE_ID, "shadowFadeOut")
+      shadowFadeOut: game.settings.get(MODULE_ID, "shadowFadeOut"),
+
+      // Emergency Broadcast
+      emergencyPreset: game.settings.get(MODULE_ID, "emergencyPreset"),
+      emergencyTitle: game.settings.get(MODULE_ID, "emergencyTitle"),
+      emergencyMessage: game.settings.get(MODULE_ID, "emergencyMessage"),
+      emergencyDuration: game.settings.get(MODULE_ID, "emergencyDuration")
     };
   }
 

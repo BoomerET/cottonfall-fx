@@ -234,7 +234,7 @@
         <input
           type="text"
           name="emergencyTitle"
-          value="SHELTER IN PLACE"
+          value="{{emergencyTitle}}"
           placeholder="Emergency title"
         />
       </label>
@@ -248,11 +248,7 @@
           name="emergencyMessage"
           rows="5"
           placeholder="Enter the emergency announcement..."
-        >All residents are instructed to remain indoors.
-
-Do not investigate knocking sounds originating from unoccupied rooms.
-
-DO NOT ACKNOWLEDGE THE SECOND ANNOUNCEMENT.</textarea>
+        >{{emergencyMessage}}</textarea>
       </label>
 
 
@@ -263,7 +259,7 @@ DO NOT ACKNOWLEDGE THE SECOND ANNOUNCEMENT.</textarea>
         <input
           type="number"
           name="emergencyDuration"
-          value="15"
+          value="{{emergencyDuration}}"
           min="0"
           max="300"
           step="1"
