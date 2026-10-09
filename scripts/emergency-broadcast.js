@@ -8,7 +8,13 @@ export class CottonfallEmergencyBroadcast {
     message = "All residents are instructed to remain indoors.",
     duration = 15
   } = {}) {
-    this.dismiss();
+    // Immediately remove any previous broadcast before creating a new one.
+    if (this.timer !== null) {
+      clearTimeout(this.timer);
+      this.timer = null;
+    }
+
+    document.getElementById(this.overlayId)?.remove();
 
     const overlay = document.createElement("div");
     overlay.id = this.overlayId;

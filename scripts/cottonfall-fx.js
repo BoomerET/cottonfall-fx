@@ -5,6 +5,47 @@ import { CottonfallShadow } from "./shadow-apparition.js";
 import { CottonfallEmergencyBroadcast } from "./emergency-broadcast.js";
 
 const MODULE_ID = "cottonfall-fx";
+const EMERGENCY_PRESETS = {
+  shelter: {
+    title: "SHELTER IN PLACE",
+    message: `All residents are instructed to remain indoors.
+
+Do not investigate knocking sounds originating from unoccupied rooms.
+
+DO NOT ACKNOWLEDGE THE SECOND ANNOUNCEMENT.`
+  },
+
+  missing: {
+    title: "MISSING RESIDENT ADVISORY",
+    message: `The Cottonfall Emergency Management Office is requesting assistance in locating a missing resident.
+
+If you encounter an individual matching your own description, do not approach.
+
+Report the sighting immediately.`
+  },
+
+  transmission: {
+    title: "UNIDENTIFIED TRANSMISSION",
+    message: `An unauthorized transmission has been detected on all municipal frequencies.
+
+Residents are advised not to respond to voices identifying themselves as emergency personnel.
+
+The source of the transmission has not been located.`
+  },
+
+  "317": {
+    title: "PROTOCOL 3:17",
+    message: `This is an automated emergency notification.
+
+The current time is 3:17.
+
+If your clocks display a different time, do not attempt to correct them.
+
+Remain where you are until the second tone.
+
+There will be no second tone.`
+  }
+};
 const sleep = (ms) => new Promise((resolve) => setTimeout(resolve, Math.max(0, ms)));
 
 /*
@@ -108,6 +149,7 @@ class CottonfallFXPanel extends foundry.applications.api.HandlebarsApplicationMi
       shadowPlace: CottonfallFXPanel.#shadowPlace,
       emergencyBroadcast: CottonfallFXPanel.#emergencyBroadcast,
       emergencyDismiss: CottonfallFXPanel.#emergencyDismiss,
+      //emergencyPreset: CottonfallFXPanel.#emergencyPreset,
     }
   };
 
@@ -204,6 +246,47 @@ class CottonfallFXPanel extends foundry.applications.api.HandlebarsApplicationMi
 
   static #emergencyDismiss() {
     return globalThis.CottonfallFX?.dismissEmergency();
+  }
+
+  static #emergencyPreset(event, button) {
+    const panel = button.closest(".cottonfall-fx");
+    if (!panel) return;
+
+    const preset = EMERGENCY_PRESETS[
+      panel.querySelector('[name="emergencyPreset"]')?.value
+    ];
+
+    if (!preset) return;
+
+    panel.querySelector('[name="emergencyTitle"]').value =
+      preset.title;
+
+    panel.querySelector('[name="emergencyMessage"]').value =
+      preset.message;
+  }
+
+  _onRender(context, options) {
+    super._onRender(context, options);
+    
+    const select = this.element.querySelector(
+      '[name="emergencyPreset"]'
+    );
+  
+    select?.addEventListener("change", (event) => {
+      const preset = EMERGENCY_PRESETS[event.target.value];
+      if (!preset) return;
+    
+      const title = this.element.querySelector(
+        '[name="emergencyTitle"]'
+      );
+    
+      const message = this.element.querySelector(
+        '[name="emergencyMessage"]'
+      );
+    
+      if (title) title.value = preset.title;
+      if (message) message.value = preset.message;
+    });
   }
 }
 
