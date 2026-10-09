@@ -77,19 +77,57 @@
       Power Flicker
     </button>
 
-    <button 
-      type="button" 
-      data-action="shadowPlace"
-      class="cottonfall-fx-button"
-    >
-      <i class="fas fa-user-secret"></i>
-      Something in the Fog
-    </button>
-
-
+    <div class="cottonfall-fx-shadow-settings">
+      <h3>Something in the Fog</h3>
+    
+      <div class="cottonfall-fx-shadow-timings">
+        <label>
+          Fade In (seconds)
+          <input
+            type="number"
+            name="shadowFadeIn"
+            value="4"
+            min="1"
+            max="30"
+            step="1"
+          >
+        </label>
+    
+        <label>
+          Remains Visible (seconds)
+          <input
+            type="number"
+            name="shadowHold"
+            value="6"
+            min="1"
+            max="30"
+            step="1"
+          >
+        </label>
+    
+        <label>
+          Fade Out (seconds)
+          <input
+            type="number"
+            name="shadowFadeOut"
+            value="5"
+            min="1"
+            max="30"
+            step="1"
+          >
+        </label>
+      </div>
+    
+      <button
+        type="button"
+        data-action="shadowPlace"
+        class="cottonfall-fx-button"
+      >
+        <i class="fas fa-user-secret"></i>
+        Place Apparition
+      </button>
+    </div>
   </section>
-
-  
 
   <section class="cottonfall-fx-section cottonfall-fx-future">
     <h2>Coming Later</h2>

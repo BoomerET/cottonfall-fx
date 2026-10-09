@@ -121,9 +121,28 @@ class CottonfallFXPanel extends foundry.applications.api.HandlebarsApplicationMi
   static #fogOn() { return globalThis.CottonfallFX?.fogOn(); }
   static #fogOff() { return globalThis.CottonfallFX?.fogOff(); }
   static #powerFlicker() { return globalThis.CottonfallFX?.powerFlicker(); }
-  static #shadowPlace() { return globalThis.CottonfallFX?.placeShadow(); }
-}
+  static #shadowPlace(event, button) {
+    const panel = button.closest(".cottonfall-fx-panel");
 
+    const readSeconds = (name, fallback) => {
+      const input = panel?.querySelector(`[name="${name}"]`);
+      const value = Number(input?.value);
+
+      if (!input || !Number.isFinite(value)) return fallback;
+
+      // Keep values between 1 and 30 seconds.
+      return Math.round(Math.max(1, Math.min(30, value))) * 1000;
+    };
+
+    const options = {
+      fadeIn: readSeconds("shadowFadeIn", 4000),
+      hold: readSeconds("shadowHold", 6000),
+      fadeOut: readSeconds("shadowFadeOut", 5000)
+    };
+
+    return globalThis.CottonfallFX?.placeShadow(options);
+  }
+}
 
 /*
  * Register our control after FXMaster has established the Effects group.
