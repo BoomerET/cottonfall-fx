@@ -83,3 +83,26 @@
   text-align: center;
   margin-right: 5px;
 }
+
+/* Something in the Fog timing controls */
+
+.cottonfall-fx-shadow-timings {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 8px;
+  margin-bottom: 10px;
+}
+
+.cottonfall-fx-shadow-timings label {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  min-width: 0;
+  font-size: 12px;
+}
+
+.cottonfall-fx-shadow-timings input {
+  width: 100%;
+  min-width: 0;
+  box-sizing: border-box;
+}
