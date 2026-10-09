@@ -283,22 +283,51 @@ class CottonfallFXPanel extends foundry.applications.api.HandlebarsApplicationMi
       '[name="emergencyPreset"]'
     );
 
-    select?.addEventListener("change", (event) => {
-      const preset = EMERGENCY_PRESETS[event.target.value];
-      if (!preset) return;
+    const title = this.element.querySelector(
+      '[name="emergencyTitle"]'
+    );
 
-      const title = this.element.querySelector(
-        '[name="emergencyTitle"]'
-      );
+    const message = this.element.querySelector(
+      '[name="emergencyMessage"]'
+    );
 
-      const message = this.element.querySelector(
-        '[name="emergencyMessage"]'
-      );
+    if (!select || !title || !message) return;
 
-      if (title) title.value = preset.title;
-      if (message) message.value = preset.message;
+    // Restore the last selected preset.
+    select.value = game.settings.get(MODULE_ID, "emergencyPreset");
+
+    // Remember the custom message while this panel is open.
+    let customTitle = game.settings.get(MODULE_ID, "emergencyCustomTitle");
+    let customMessage = game.settings.get(MODULE_ID, "emergencyCustomMessage");
+
+    select.addEventListener("change", (event) => {
+      const previousPreset = this._currentEmergencyPreset ?? select.value;
+      const selectedPreset = event.target.value;
+
+      // Preserve the custom message before leaving Custom Message.
+      if (previousPreset === "custom") {
+        customTitle = title.value;
+        customMessage = message.value;
+      }
+
+      if (selectedPreset === "custom") {
+        title.value = customTitle || "SHELTER IN PLACE";
+        message.value = customMessage || "";
+      } else {
+        const preset = EMERGENCY_PRESETS[selectedPreset];
+
+        if (preset) {
+          title.value = preset.title;
+          message.value = preset.message;
+        }
+      }
+
+      this._currentEmergencyPreset = selectedPreset;
     });
+
+    this._currentEmergencyPreset = select.value;
   }
+
 }
 
 /*
