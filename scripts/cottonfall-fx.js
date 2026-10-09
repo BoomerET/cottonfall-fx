@@ -32,18 +32,30 @@ function applyGlitchLocal(data) {
     case "enable":
       CottonfallGlitch.enable(data.opts || {});
       break;
+
     case "disable":
       CottonfallGlitch.disable();
       break;
+
     case "setOptions":
       CottonfallGlitch.setOptions(data.opts || {});
       break;
+
     case "shadow":
       if (data.sceneId !== canvas.scene?.id) return;
       void CottonfallShadow.play(data).catch(err =>
         console.error("Cottonfall FX | Shadow failed", err)
       );
       return;
+
+    case "emergencyBroadcast":
+      CottonfallEmergencyBroadcast.show(data.options ?? {});
+      break;
+
+    case "emergencyDismiss":
+      CottonfallEmergencyBroadcast.dismiss();
+    break;
+
     default:
       return;
   }
@@ -458,7 +470,31 @@ Hooks.once("ready", () => {
 
       // final, unmistakable break
       await this.fullBreak(900);
-    }
+    },
+
+    /* ---------------- Emergency Broadcast ---------------- */
+    broadcastEmergency(options = {}) {
+      if (!game.user.isGM) return;
+
+      // Display immediately on the GM's screen.
+      CottonfallEmergencyBroadcast.show(options);
+
+      // Send the same announcement to connected players.
+      game.socket.emit(SOCKET, {
+        type: "emergencyBroadcast",
+        options
+      });
+    },
+
+    dismissEmergency() {
+      if (!game.user.isGM) return;
+
+      CottonfallEmergencyBroadcast.dismiss();
+
+      game.socket.emit(SOCKET, {
+        type: "emergencyDismiss"
+      });
+    },
   };
 
   // Temporary Emergency Broadcast test API
