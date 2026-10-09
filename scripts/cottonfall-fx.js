@@ -107,7 +107,11 @@ class CottonfallFXPanel extends foundry.applications.api.HandlebarsApplicationMi
    */
   async _prepareContext() {
     return {
-      glitchActive: !!CottonfallGlitch.active
+      glitchActive: !!CottonfallGlitch.active,
+
+      shadowFadeIn: game.settings.get(MODULE_ID, "shadowFadeIn"),
+      shadowHold: game.settings.get(MODULE_ID, "shadowHold"),
+      shadowFadeOut: game.settings.get(MODULE_ID, "shadowFadeOut")
     };
   }
 
@@ -121,7 +125,7 @@ class CottonfallFXPanel extends foundry.applications.api.HandlebarsApplicationMi
   static #fogOn() { return globalThis.CottonfallFX?.fogOn(); }
   static #fogOff() { return globalThis.CottonfallFX?.fogOff(); }
   static #powerFlicker() { return globalThis.CottonfallFX?.powerFlicker(); }
-  static #shadowPlace(event, button) {
+  static async #shadowPlace(event, button) {
     const panel = button.closest(".cottonfall-fx-panel");
 
     const readSeconds = (name, fallback) => {
@@ -130,17 +134,27 @@ class CottonfallFXPanel extends foundry.applications.api.HandlebarsApplicationMi
 
       if (!input || !Number.isFinite(value)) return fallback;
 
-      // Keep values between 1 and 30 seconds.
-      return Math.round(Math.max(1, Math.min(30, value))) * 1000;
+      // Restrict values to 1–30 whole seconds.
+      return Math.round(Math.max(1, Math.min(30, value)));
     };
 
-    const options = {
-      fadeIn: readSeconds("shadowFadeIn", 4000),
-      hold: readSeconds("shadowHold", 6000),
-      fadeOut: readSeconds("shadowFadeOut", 5000)
-    };
+    const fadeIn = readSeconds("shadowFadeIn", 4);
+    const hold = readSeconds("shadowHold", 6);
+    const fadeOut = readSeconds("shadowFadeOut", 5);
 
-    return globalThis.CottonfallFX?.placeShadow(options);
+    // Save the GM's preferred timings in seconds.
+    await Promise.all([
+      game.settings.set(MODULE_ID, "shadowFadeIn", fadeIn),
+      game.settings.set(MODULE_ID, "shadowHold", hold),
+      game.settings.set(MODULE_ID, "shadowFadeOut", fadeOut)
+    ]);
+
+    // The apparition animation expects milliseconds.
+    return globalThis.CottonfallFX?.placeShadow({
+      fadeIn: fadeIn * 1000,
+      hold: hold * 1000,
+      fadeOut: fadeOut * 1000
+    });
   }
 }
 
@@ -148,6 +162,22 @@ class CottonfallFXPanel extends foundry.applications.api.HandlebarsApplicationMi
  * Register our control after FXMaster has established the Effects group.
  */
 Hooks.once("init", () => {
+    // Something in the Fog — GM timing preferences
+    const shadowSettings = {
+      shadowFadeIn: 4,
+      shadowHold: 6,
+      shadowFadeOut: 5
+    };
+
+    for (const [key, defaultValue] of Object.entries(shadowSettings)) {
+      game.settings.register(MODULE_ID, key, {
+        name: key,
+        scope: "client",
+        config: false,
+        type: Number,
+        default: defaultValue
+      });
+    }
   Hooks.on("getSceneControlButtons", (controls) => {
     const tools = controls.effects?.tools;
 
