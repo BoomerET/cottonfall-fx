@@ -149,7 +149,6 @@ class CottonfallFXPanel extends foundry.applications.api.HandlebarsApplicationMi
       shadowPlace: CottonfallFXPanel.#shadowPlace,
       emergencyBroadcast: CottonfallFXPanel.#emergencyBroadcast,
       emergencyDismiss: CottonfallFXPanel.#emergencyDismiss,
-      //emergencyPreset: CottonfallFXPanel.#emergencyPreset,
     }
   };
 
@@ -248,42 +247,25 @@ class CottonfallFXPanel extends foundry.applications.api.HandlebarsApplicationMi
     return globalThis.CottonfallFX?.dismissEmergency();
   }
 
-  static #emergencyPreset(event, button) {
-    const panel = button.closest(".cottonfall-fx");
-    if (!panel) return;
-
-    const preset = EMERGENCY_PRESETS[
-      panel.querySelector('[name="emergencyPreset"]')?.value
-    ];
-
-    if (!preset) return;
-
-    panel.querySelector('[name="emergencyTitle"]').value =
-      preset.title;
-
-    panel.querySelector('[name="emergencyMessage"]').value =
-      preset.message;
-  }
-
   _onRender(context, options) {
     super._onRender(context, options);
-    
+
     const select = this.element.querySelector(
       '[name="emergencyPreset"]'
     );
-  
+
     select?.addEventListener("change", (event) => {
       const preset = EMERGENCY_PRESETS[event.target.value];
       if (!preset) return;
-    
+
       const title = this.element.querySelector(
         '[name="emergencyTitle"]'
       );
-    
+
       const message = this.element.querySelector(
         '[name="emergencyMessage"]'
       );
-    
+
       if (title) title.value = preset.title;
       if (message) message.value = preset.message;
     });
@@ -308,6 +290,48 @@ Hooks.once("init", () => {
         config: false,
         type: Number,
         default: defaultValue
+      });
+    }
+
+    // Emergency Broadcast — GM's local preferences
+    const emergencySettings = {
+      emergencyPreset: {
+        type: String,
+        default: "custom"
+      },
+      emergencyTitle: {
+        type: String,
+        default: "SHELTER IN PLACE"
+      },
+      emergencyMessage: {
+        type: String,
+        default: `All residents are instructed to remain indoors.
+      
+    Do not investigate knocking sounds originating from unoccupied rooms.
+      
+    DO NOT ACKNOWLEDGE THE SECOND ANNOUNCEMENT.`
+      },
+      emergencyDuration: {
+        type: Number,
+        default: 15
+      },
+      emergencyCustomTitle: {
+        type: String,
+        default: ""
+      },
+      emergencyCustomMessage: {
+        type: String,
+        default: ""
+      }
+    };
+
+    for (const [key, setting] of Object.entries(emergencySettings)) {
+      game.settings.register(MODULE_ID, key, {
+        name: key,
+        scope: "client",
+        config: false,
+        type: setting.type,
+        default: setting.default
       });
     }
   Hooks.on("getSceneControlButtons", (controls) => {
