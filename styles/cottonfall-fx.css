@@ -106,3 +106,130 @@
   min-width: 0;
   box-sizing: border-box;
 }
+
+/* ==========================================================
+   COTTONFALL FX — EMERGENCY BROADCAST
+   ========================================================== */
+
+#cottonfall-emergency-broadcast {
+  position: fixed;
+  inset: 0;
+  z-index: 100000;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  background: rgba(0, 0, 0, 0.65);
+
+  pointer-events: none;
+
+  opacity: 0;
+  transition: opacity 1s ease;
+}
+
+#cottonfall-emergency-broadcast.cf-visible {
+  opacity: 1;
+}
+
+#cottonfall-emergency-broadcast .cf-terminal {
+  position: relative;
+  overflow: hidden;
+  box-sizing: border-box;
+
+  width: 65vw;
+  max-width: 900px;
+  max-height: 85vh;
+  overflow-y: auto;
+
+  padding: 24px;
+
+  background: #0b1210;
+  color: #a8c6af;
+
+  border: 1px solid #52735a;
+  box-shadow: 0 0 50px rgba(0, 0, 0, 0.9);
+
+  font-family: monospace;
+}
+
+#cottonfall-emergency-broadcast header,
+#cottonfall-emergency-broadcast footer,
+#cottonfall-emergency-broadcast .cf-alert {
+  display: flex;
+  justify-content: space-between;
+  gap: 16px;
+
+  font-size: 12px;
+  letter-spacing: 1px;
+}
+
+#cottonfall-emergency-broadcast header {
+  padding-bottom: 15px;
+  border-bottom: 1px solid #304b3b;
+  color: #8fba9b;
+}
+
+#cottonfall-emergency-broadcast .cf-alert {
+  padding-top: 20px;
+  color: #d3a56b;
+}
+
+#cottonfall-emergency-broadcast main {
+  display: block;
+  padding: 30px 10px;
+  line-height: 1.7;
+}
+
+#cottonfall-emergency-broadcast h1 {
+  font-family: monospace;
+  font-size: 28px;
+  color: #c7e5cd;
+  margin: 0 0 24px;
+}
+
+#cottonfall-emergency-broadcast .cf-message {
+  font-size: 16px;
+  line-height: 1.7;
+  white-space: pre-wrap;
+  margin: 0;
+}
+
+#cottonfall-emergency-broadcast .cf-warning {
+  color: #d3a56b;
+}
+
+#cottonfall-emergency-broadcast footer {
+  border-top: 1px solid #304b3b;
+  padding-top: 15px;
+  color: #779883;
+}
+
+/* Subtle CRT scanlines */
+
+#cottonfall-emergency-broadcast .cf-terminal::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+
+  pointer-events: none;
+
+  background: repeating-linear-gradient(
+    transparent 0px,
+    transparent 3px,
+    rgba(0, 0, 0, 0.12) 4px
+  );
+}
+
+/* Smaller screens */
+
+@media (max-width: 700px) {
+  #cottonfall-emergency-broadcast .cf-terminal {
+    width: 92vw;
+    padding: 16px;
+  }
+
+  #cottonfall-emergency-broadcast h1 {
+    font-size: 22px;
+  }
+}

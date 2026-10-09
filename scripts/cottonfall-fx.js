@@ -2,6 +2,7 @@ import { CottonfallGlitch } from "./glitch-filter.js";
 import { CottonfallFog } from "./fog.js";
 import { CottonfallPowerFlicker } from "./power-flicker.js";
 import { CottonfallShadow } from "./shadow-apparition.js";
+import { CottonfallEmergencyBroadcast } from "./emergency-broadcast.js";
 
 const MODULE_ID = "cottonfall-fx";
 const sleep = (ms) => new Promise((resolve) => setTimeout(resolve, Math.max(0, ms)));
@@ -460,5 +461,7 @@ Hooks.once("ready", () => {
     }
   };
 
+  // Temporary Emergency Broadcast test API
+  globalThis.CottonfallEmergency = CottonfallEmergencyBroadcast;
   console.log(`${MODULE_ID} | ready. GM API: CottonfallFX.*  |  Glitch API: CottonfallGlitch.*`);
 });
