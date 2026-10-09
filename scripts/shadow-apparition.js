@@ -7,7 +7,7 @@ export class CottonfallShadow {
     hold: 6000,
     fadeOut: 5000,
     opacity: 0.55,
-    height: 2
+    height: 1.33
   };
 
   static active = null;
