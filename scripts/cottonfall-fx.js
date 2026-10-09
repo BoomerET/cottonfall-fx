@@ -718,7 +718,5 @@ Hooks.once("ready", () => {
 
   };
 
-  // Temporary Emergency Broadcast test API
-  globalThis.CottonfallEmergency = CottonfallEmergencyBroadcast;
   console.log(`${MODULE_ID} | ready. GM API: CottonfallFX.*  |  Glitch API: CottonfallGlitch.*`);
 });
