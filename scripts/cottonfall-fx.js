@@ -219,13 +219,18 @@ class CottonfallFXPanel extends foundry.applications.api.HandlebarsApplicationMi
       fadeOut: fadeOut * 1000
     });
   }
-  static #emergencyBroadcast(event, button) {
+  
+  static async #emergencyBroadcast(event, button) {
     const panel = button.closest(".cottonfall-fx");
 
     if (!panel) {
       console.error("Cottonfall FX | Emergency panel not found.");
       return;
     }
+
+    const preset = panel.querySelector(
+      '[name="emergencyPreset"]'
+    )?.value ?? "custom";
 
     const title = panel.querySelector(
       '[name="emergencyTitle"]'
@@ -243,6 +248,23 @@ class CottonfallFXPanel extends foundry.applications.api.HandlebarsApplicationMi
       ? Math.max(0, Math.min(300, Math.round(rawDuration)))
       : 15;
 
+    // Save the GM's current broadcast preferences.
+    await Promise.all([
+      game.settings.set(MODULE_ID, "emergencyPreset", preset),
+      game.settings.set(MODULE_ID, "emergencyTitle", title),
+      game.settings.set(MODULE_ID, "emergencyMessage", message),
+      game.settings.set(MODULE_ID, "emergencyDuration", duration)
+    ]);
+
+    // Preserve custom messages separately from the presets.
+    if (preset === "custom") {
+      await Promise.all([
+        game.settings.set(MODULE_ID, "emergencyCustomTitle", title),
+        game.settings.set(MODULE_ID, "emergencyCustomMessage", message)
+      ]);
+    }
+
+    // Broadcast after saving.
     return globalThis.CottonfallFX?.broadcastEmergency({
       title,
       message,
